@@ -28,10 +28,10 @@ void main(string[] args)
 {
 	if (args.length == 1)
 		throw new Exception("No file specified");
-	foreach (arg; args[1..$])
+	foreach (arg; args[1 .. $])
 		try
 		{
-			scope swf = SWFFile.read(cast(ubyte[])read(arg));
+			scope swf = SWFFile.read(cast(ubyte[]) read(arg));
 			uint count = 0;
 			foreach (ref tag; swf.tags)
 				if ((tag.type == TagType.DoABC || tag.type == TagType.DoABC2))
@@ -41,9 +41,11 @@ void main(string[] args)
 						abc = tag.data;
 					else
 					{
-						auto p = tag.data.ptr+4; // skip flags
-						while (*p++) {} // skip name
-						abc = tag.data[p-tag.data.ptr..$];
+						auto p = tag.data.ptr + 4; // skip flags
+						while (*p++)
+						{
+						} // skip name
+						abc = tag.data[p - tag.data.ptr .. $];
 					}
 					std.file.write(stripExtension(arg) ~ "-" ~ to!string(count++) ~ ".abc", abc);
 				}
